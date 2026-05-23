@@ -331,24 +331,23 @@ export default class AmericanVehicle extends Vehicle {
   }
 
   public async startCharge(): Promise<string> {
-    const response = await this._request(
-      `/api/v2/spa/vehicles/${this.vehicleConfig.id}/control/charge`,
-      {
-        method: 'POST',
-      }
-    );
+    const response = await this._request('ac/v2/evc/charge/start', {
+      method: 'POST',
+      headers: { ...this.getDefaultHeaders() },
+    });
 
     if (response.statusCode === 200) {
       logger.debug(`Send start charge command to Vehicle ${this.vehicleConfig.id}`);
       return 'Start charge successful';
     }
 
-    throw 'Something went wrong!';
+    throw new Error(`startCharge failed: HTTP ${response.statusCode} — ${response.body}`);
   }
 
   public async stopCharge(): Promise<string> {
-    const response = await got(`/api/v2/spa/vehicles/${this.vehicleConfig.id}/control/charge`, {
+    const response = await this._request('ac/v2/evc/charge/stop', {
       method: 'POST',
+      headers: { ...this.getDefaultHeaders() },
     });
 
     if (response.statusCode === 200) {
@@ -356,7 +355,7 @@ export default class AmericanVehicle extends Vehicle {
       return 'Stop charge successful';
     }
 
-    throw 'Something went wrong!';
+    throw new Error(`stopCharge failed: HTTP ${response.statusCode} — ${response.body}`);
   }
 
   // TODO: not sure how to type a dynamic response

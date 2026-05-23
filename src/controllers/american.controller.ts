@@ -134,6 +134,7 @@ export class AmericanController extends SessionController<AmericanBlueLinkyConfi
       this.vehicles = data.enrolledVehicleDetails.map(vehicle => {
         const vehicleInfo = vehicle.vehicleDetails;
         const vehicleConfig = {
+          id: vehicleInfo.regid,
           nickname: vehicleInfo.nickName,
           name: vehicleInfo.nickName,
           vin: vehicleInfo.vin,
